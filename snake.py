@@ -1,7 +1,8 @@
-import pygame
 import random
-from typing import List, Tuple, Deque, Set
 from collections import deque
+from typing import Deque, List, Set, Tuple
+
+import pygame
 
 # --- Constants ---
 WIDTH, HEIGHT = 600, 400
@@ -35,7 +36,8 @@ class Food:
 
     def _random_free_cell(self, occupied: Set[Tuple[int, int]]) -> Tuple[int, int]:
         # Efficient placement: choose uniformly from free cells
-        all_cells = [(x, y) for x in range(GRID_COLS) for y in range(GRID_ROWS)]
+        all_cells = [(x, y) for x in range(GRID_COLS)
+                     for y in range(GRID_ROWS)]
         if occupied:
             # If the board is almost full, this remains efficient
             free_cells = [c for c in all_cells if c not in occupied]
@@ -112,7 +114,9 @@ class Game:
     def reset(self):
         self.snake = Snake()
         self.food = Food(self.snake.occupies())
-        self.pending_dir = self.snake.direction  # buffer next direction for responsive control
+        self.pending_dir = (
+            self.snake.direction
+        )  # buffer next direction for responsive control
         self.running = True
         self.game_over = False
         self.score = 0
@@ -176,14 +180,16 @@ class Game:
 
     def draw_snake(self):
         for i, (x, y) in enumerate(self.snake.segments):
-            rect = pygame.Rect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE)
+            rect = pygame.Rect(x * CELL_SIZE, y * CELL_SIZE,
+                               CELL_SIZE, CELL_SIZE)
             color = SNAKE_HEAD_COLOR if i == 0 else SNAKE_BODY_COLOR
             pygame.draw.rect(self.screen, color, rect)
 
     def draw_food(self):
         if self.food.pos != (-1, -1):
             x, y = self.food.pos
-            rect = pygame.Rect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE)
+            rect = pygame.Rect(x * CELL_SIZE, y * CELL_SIZE,
+                               CELL_SIZE, CELL_SIZE)
             pygame.draw.rect(self.screen, FOOD_COLOR, rect)
 
     def draw_hud(self):
@@ -192,7 +198,9 @@ class Game:
 
         if self.game_over:
             title = self.font.render("Game Over", True, TEXT_COLOR)
-            hint = self.font.render("Press R/Enter/Space to Restart, Esc to Quit", True, TEXT_COLOR)
+            hint = self.font.render(
+                "Press R/Enter/Space to Restart, Esc to Quit", True, TEXT_COLOR
+            )
             tw = title.get_width()
             hw = hint.get_width()
             self.screen.blit(title, ((WIDTH - tw) // 2, HEIGHT // 2 - 20))
